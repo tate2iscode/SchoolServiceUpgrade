@@ -9,7 +9,6 @@ public class userDatasController {
     @RequestMapping("")
     @ResponseBody
     public String webUserDatasInput() {
-
         return "hi";
     }
 }
