@@ -8,6 +8,12 @@ public class userDAO {
     Statement stmt = null;
     public String table;
 
+    public void setting() {
+        if(conn == null) {
+            this.SqlTest(getConnection(),"user");
+        }
+    }
+
     public void SqlTest(Connection conn, String table) {
         this.conn = conn;
         this.table = table;
@@ -138,8 +144,8 @@ public class userDAO {
 
     public static Connection getConnection() {
         try {
-
-            System.out.println("[ 접속 완료 ]");
+            
+            System.out.println("[ 데이터 서버 접속 완료 ]");
             return DriverManager.getConnection(dbURL, dbId, dbPassword);
         } catch (ClassNotFoundException e) {
             System.out.println("실패1");

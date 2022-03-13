@@ -18,11 +18,8 @@ import static com.example.schoolservice.userData.userDAO.getConnection;
 
 @Controller
 public class mealController {
-    @RequestMapping(value = "meal/{time}")
-    @ResponseBody
-    public Response meal(@PathVariable("time") Integer time) {
-        return responsemessage(requestmeal("진주동명고등학교",time));
-    }
+    //public static userDAO userDAO = null;
+    //public userSchool userSchool = new userSchool();
 
     @RequestMapping(value = "interact/{time}")
     @ResponseBody
@@ -36,7 +33,8 @@ public class mealController {
         jsonString = objectMapper.writeValueAsString(content);
         String userId = getUserId(jsonString);
 
-        userDAO userDAO = new userDAO();
+        userDAO userDAO = com.example.schoolservice.userData.userSchool.userDAO;
+
         userDAO.SqlTest(Objects.requireNonNull(getConnection()), "user");
 
         userDTO userDTO = userDAO.getInformation(userId);
@@ -45,7 +43,7 @@ public class mealController {
         return responsemessage(meal);
     }
 
-    @RequestMapping(value = "test/{time}")
+    @RequestMapping(value = "meal/{time}")
     @ResponseBody
     public Response test(@PathVariable("time") Integer time, @RequestBody Map<String,Object> content) throws JsonProcessingException {
         if(content == null) {
@@ -57,16 +55,19 @@ public class mealController {
         jsonString = objectMapper.writeValueAsString(content);
         String userId = getUserId(jsonString);
 
-        userDAO userDAO = new userDAO();
-        userDAO.SqlTest(Objects.requireNonNull(getConnection()), "user");
+        userDAO userDAO = com.example.schoolservice.userData.userSchool.userDAO;
+        userDAO.setting();
+        //if(userDAO.conn == null) {
+        //    userDAO.SqlTest(Objects.requireNonNull(getConnection()), "user");
+        //}
 
         if(userDAO.confirm(userId)) {
             userDTO userDTO = userDAO.getInformation(userId);
-            String meal = requestmeal(userDTO.getUserSchool(),2);
+            String meal = requestmeal(userDTO.getUserSchool(),time);
 
             return responsemessage(meal);
+        }else {
+            return responsemessage("학교 설정을 해주세요");
         }
-
-        return responsemessage(userId);
     }
 }
