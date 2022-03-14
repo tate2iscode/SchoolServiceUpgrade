@@ -9,7 +9,7 @@ public class getFileSchoolInfo {
         HashMap<String,String> result = new HashMap<>();
         //시도교육청코드 0 표준학교코드 2 학교명 3
         result.put("exist","0");
-        for(List<String> info : readCSV("data/schoolinfo/학교기본정보.csv")) {
+        for(List<String> info : readCSV("data/schoolinfo/school.csv")) {
             if(info.size() == 1) {
                 return result;
             }

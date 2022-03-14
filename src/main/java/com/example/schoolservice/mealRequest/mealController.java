@@ -8,18 +8,26 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
 import static com.example.schoolservice.chatbot.interactUser.interacting.getUserId;
 import static com.example.schoolservice.chatbot.responseMessage.responsemessage;
 import static com.example.schoolservice.mealRequest.requestMeal.requestmeal;
+import static com.example.schoolservice.userData.getFileSchoolInfo.schoolinfo;
 import static com.example.schoolservice.userData.userDAO.getConnection;
 
 @Controller
 public class mealController {
     //public static userDAO userDAO = null;
     //public userSchool userSchool = new userSchool();
+    @RequestMapping("schooltest/{schoolName}")
+    @ResponseBody
+    public HashMap<String, String> schoolTest(@PathVariable("schoolName") String schoolName){
+        return schoolinfo(schoolName);
+    }
+
 
     @RequestMapping(value = "interact/{time}")
     @ResponseBody
@@ -65,9 +73,20 @@ public class mealController {
             userDTO userDTO = userDAO.getInformation(userId);
             String meal = requestmeal(userDTO.getUserSchool(),time);
 
-            return responsemessage(meal);
+            return responsemessage(textLineChange(meal));
         }else {
             return responsemessage("학교 설정을 해주세요");
         }
+
+
+    }
+
+    public String textLineChange(String text) {
+        String[] line = text.split(" ");
+        StringBuilder result = new StringBuilder();
+        for(String ap : line) {
+            result.append(ap).append("\n");
+        }
+        return result.substring(0, result.toString().length() - 1);
     }
 }

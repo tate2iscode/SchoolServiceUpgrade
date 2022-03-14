@@ -40,7 +40,26 @@ public class userDatasController {
                 "</body>\n" +
                 "</html>";
 
-        return result;
+        String r = "<!DOCTYPE html>\n" +
+                "<html lang=\"en\">\n" +
+                "<head>\n" +
+                "    <meta charset=\"UTF-8\">\n" +
+                "    <title>InputInformation</title>\n" +
+                "</head>\n" +
+                "<body>\n" +
+                "    <div style=\"text-align: center;\">\n" +
+                "        <form action=\"/joining/"+id+"\">\n" +
+                "            <h3>입력하세요 ㅋ</h3>\n" +
+                "            <input type=\"text\" name=\"userSchool\" placeholder=\"학교이름\"><br>\n" +
+                "            <input type=\"text\" name=\"userGrade\" placeholder=\"학년\"><br>\n" +
+                "            <input type=\"text\" name=\"userClass\" placeholder=\"반\"><br>\n" +
+                "            <input type=\"submit\" value=\"제출\">\n" +
+                "        </form>\n" +
+                "    </div>\n" +
+                "</body>\n" +
+                "</html>";
+
+        return r;
     }
 
     @RequestMapping("/joining/{id}")
@@ -56,7 +75,7 @@ public class userDatasController {
             userDTO.setUserId(id);
             userDAO.insert(userDTO);
         }
-        return "완료";
+        return "<div style=\"text-align: center;\">완료</div>";
     }
 
     @RequestMapping("/setting/url")
@@ -68,7 +87,7 @@ public class userDatasController {
         String userId = getUserId(jsonString);
 
 
-        return responsemessage("이 url에 들어가서 정보를 입력하세요 \n https://usr/"+userId);
+        return responsemessage("이 url에 들어가서 정보를 입력하세요 \n http://chlgusgh.kro.kr:8080/join/"+userId);
     }
 
     @RequestMapping("/userid")
