@@ -1,17 +1,54 @@
 package com.example.schoolservice.userData;
 
 import java.sql.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Objects;
 
 public class userDAO {
     public Connection conn = null;
     Statement stmt = null;
     public String table;
+    public timeDTO time = null;
 
     public void setting() {
-        if(conn == null) {
-            this.SqlTest(getConnection(),"user");
+        if(this.time == null) {
+            this.time = setTime();
         }
+
+        if(conn == null || compareTime()) {
+            this.time = setTime();
+            SqlTest(Objects.requireNonNull(getConnection()),"user");
+        }
+    }
+
+    public boolean compareTime() {
+        timeDTO nowTime = setTime();
+        if(!Objects.equals(this.time.getHour(), nowTime.getHour())) {
+            this.time = nowTime;
+            return true;
+        } else if(!Objects.equals(this.time.getDay(), nowTime.getDay())) {
+            this.time = nowTime;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public timeDTO setTime() {
+        SimpleDateFormat kTime = new SimpleDateFormat("yyyy MM dd HH mm ss", Locale.KOREA);
+        Date date = new Date();
+        String time = kTime.format(date);
+        String[] parts = time.split(" ");
+        timeDTO timeDTO = new timeDTO();
+        timeDTO.setYear(Integer.valueOf(parts[0]));
+        timeDTO.setMonth(Integer.valueOf(parts[1]));
+        timeDTO.setDay(Integer.valueOf(parts[2]));
+        timeDTO.setHour(Integer.valueOf(parts[3]));
+        timeDTO.setMin(Integer.valueOf(parts[4]));
+        timeDTO.setSecond(Integer.valueOf(parts[5]));
+        return timeDTO;
     }
 
     public void SqlTest(Connection conn, String table) {
@@ -144,7 +181,7 @@ public class userDAO {
 
     public static Connection getConnection() {
         try {
-            
+
             System.out.println("[ 데이터 서버 접속 완료 ]");
             return DriverManager.getConnection(dbURL, dbId, dbPassword);
         } catch (ClassNotFoundException e) {

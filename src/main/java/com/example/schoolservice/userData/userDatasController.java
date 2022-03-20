@@ -8,14 +8,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.filter.OncePerRequestFilter;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Map;
-import java.util.Objects;
+import java.util.Scanner;
 
 import static com.example.schoolservice.chatbot.interactUser.interacting.getUserId;
 import static com.example.schoolservice.chatbot.responseMessage.responsemessage;
-import static com.example.schoolservice.userData.userDAO.getConnection;
 
 @Controller
 public class userDatasController {
@@ -99,5 +99,28 @@ public class userDatasController {
         String userId = getUserId(jsonString);
 
         return responsemessage(userId);
+    }
+
+    @RequestMapping("/log")
+    @ResponseBody
+    public String log() throws FileNotFoundException {
+        File file = new File("nohup.out");
+        Scanner myReader = new Scanner(file);
+        StringBuilder result = new StringBuilder();
+        while(myReader.hasNext()) {
+            String data = myReader.nextLine();
+            result.append(data).append("\n");
+        }
+
+        return result.toString();
+    }
+
+    @RequestMapping("/data")
+    @ResponseBody
+    public String data() {
+        userDAO userDAO = userSchool.userDAO;
+        userDAO.setting();
+        //userDAO.selectAll();
+        return "";
     }
 }
