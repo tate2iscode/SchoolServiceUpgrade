@@ -8,9 +8,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 import static com.example.schoolservice.chatbot.interactUser.interacting.getUserId;
 import static com.example.schoolservice.chatbot.responseMessage.responsemessage;
@@ -72,8 +71,8 @@ public class mealController {
         if(userDAO.confirm(userId)) {
             userDTO userDTO = userDAO.getInformation(userId);
             String meal = requestmeal(userDTO.getUserSchool(),time);
-
-            return responsemessage(textLineChange(meal));
+            String add = getTime()+" "+userDTO.getUserSchool()+" ";
+            return responsemessage(textLineChange(add+meal));
         }else {
             return responsemessage("학교 설정을 해주세요");
         }
@@ -88,5 +87,12 @@ public class mealController {
             result.append(ap).append("\n");
         }
         return result.substring(0, result.toString().length() - 1);
+    }
+
+    public String getTime() {
+        SimpleDateFormat kTime = new SimpleDateFormat("yyyy/MM/dd", Locale.KOREA);
+        Date date = new Date();
+        String time = kTime.format(date);
+        return time;
     }
 }

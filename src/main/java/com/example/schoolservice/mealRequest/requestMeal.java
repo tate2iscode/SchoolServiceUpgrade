@@ -17,7 +17,7 @@ public class requestMeal {
     public static String requestmeal(String schoolName, int time) {
         HashMap<String,String> school = schoolinfo(schoolName);
         if(Objects.equals(school.get("exist"), "0")) {
-            return "학교 설정을 다시해주세요";
+            return "학교_설정을_다시해주세요";
         }
 
         String url = String.format("https://open.neis.go.kr/hub/mealServiceDietInfo?ATPT_OFCDC_SC_CODE=%s&SD_SCHUL_CODE=%s&MLSV_YMD=%s&Type=json&MMEAL_SC_CODE=%d",school.get("atpt"),school.get("sd"),dayTime(),time); // 2는 중식 3은 석식
